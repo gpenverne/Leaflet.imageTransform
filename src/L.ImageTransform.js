@@ -103,7 +103,7 @@ L.ImageTransform = L.ImageOverlay.extend({
     },
 
     _reset: function () {
-        if (this.options.clip && !this._imgNode.complete) {return;}
+        if (this.options.clip && !this._imgNode.complete) { return; }
         var div = this._image,
             imgNode = this.options.clip ? this._canvas : this._imgNode,
             topLeft = this._latLngToLayerPoint(this._bounds.getNorthWest()),
