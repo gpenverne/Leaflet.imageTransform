@@ -45,7 +45,12 @@
                 };
             
             L.polygon(clip, {fillOpacity: 0, opacity: 1, weight: 2}).addTo(map).on('click', function() {
-                L.imageTransform(item.url, anchors, options).addTo(map);
+                if (item._quicklook) {
+                    map.removeLayer(item._quicklook);
+                    item._quicklook = null;
+                } else {
+                    item._quicklook = L.imageTransform(item.url, anchors, options).addTo(map);
+                }
             })
         };
         

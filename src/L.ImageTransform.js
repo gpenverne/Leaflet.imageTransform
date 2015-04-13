@@ -33,6 +33,7 @@ L.ImageTransform = L.ImageOverlay.extend({
             pixelClipPoints.push(L.point(pixel[0], pixel[1]));
         }
 
+        this._clipDone = false;
         this.setClipPixels(pixelClipPoints);
     },
 
@@ -50,6 +51,7 @@ L.ImageTransform = L.ImageOverlay.extend({
         return this.options.clip;
     },
 
+    _imgLoaded: false,
     _initImage: function () {
         this._image = L.DomUtil.create('div', 'leaflet-image-layer');
 
@@ -64,6 +66,7 @@ L.ImageTransform = L.ImageOverlay.extend({
             this._canvas = L.DomUtil.create('canvas', 'leaflet-canvas-transform');
             this._image.appendChild(this._canvas);
             this._canvas.style[L.DomUtil.TRANSFORM_ORIGIN] = '0 0';
+            this._clipDone = false;
         } else {
             this._image.appendChild(this._imgNode);
             this._imgNode.style[L.DomUtil.TRANSFORM_ORIGIN] = '0 0';
@@ -75,6 +78,7 @@ L.ImageTransform = L.ImageOverlay.extend({
         this._updateOpacity();
 
         //TODO createImage util method to remove duplication
+        this._imgLoaded = false;
         L.extend(this._imgNode, {
             galleryimg: 'no',
             onselectstart: L.Util.falseFn,
@@ -97,13 +101,14 @@ L.ImageTransform = L.ImageOverlay.extend({
             // Show imgNode once image has loaded
             this._imgNode.style.display = 'inherit';
         }
+        this._imgLoaded = true;
 
         this._reset();
         this.fire('load');
     },
 
     _reset: function () {
-        if (this.options.clip && !this._imgNode.complete) { return; }
+        if (this.options.clip && !this._imgLoaded) { return; }
         var div = this._image,
             imgNode = this.options.clip ? this._canvas : this._imgNode,
             topLeft = this._latLngToLayerPoint(this._bounds.getNorthWest()),
@@ -168,20 +173,25 @@ L.ImageTransform = L.ImageOverlay.extend({
         return css;
     },
 
+    _clipDone: false,
     _drawCanvas: function () {
-        var canvas = this._canvas,
-            ctx = canvas.getContext('2d');
+        if (!this._clipDone) {
+            var canvas = this._canvas,
+                ctx = canvas.getContext('2d');
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = ctx.createPattern(this._imgNode, 'no-repeat');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = ctx.createPattern(this._imgNode, 'no-repeat');
 
-        ctx.beginPath();
-        for (var i = 0, len = this._pixelClipPoints.length; i < len; i++) {
-            var pix = this._pixelClipPoints[i];
-            ctx[i ? 'lineTo' : 'moveTo'](pix.x, pix.y);
+            ctx.beginPath();
+            for (var i = 0, len = this._pixelClipPoints.length; i < len; i++) {
+                var pix = this._pixelClipPoints[i];
+                ctx[i ? 'lineTo' : 'moveTo'](pix.x, pix.y);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = null;
+            this._clipDone = true;
         }
-        ctx.closePath();
-        ctx.fill();
     }
 });
 
