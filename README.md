@@ -40,7 +40,7 @@ new L.ImageTransform(url, anchors, options)
   * `anchors` - 4-elements array of `<L.LatLng>` points
   * `options`:
     * `clip` - array of `<L.LatLng>` points to clip transformed image. This polygon will be transformed along with image tranformation
-    * `disableSetClip` - `<boolean>` if true setClip method disabled for performance (Default `false`).
+    * `disableSetClip` - `<boolean>` if true `setClip` method disabled for performance (Default `false`).
 
 ###Methods
 
@@ -54,7 +54,7 @@ Recalculate image transformation using new anchors. `newAnchors` is array with 4
 setClip(newClipPoints)
 ```
 Update clip polygon. `newClipPoints` is array of `L.latLng` points.
-(Only for options.disableSetClip != true)
+(Only for `options.disableSetClip != true`)
 <br><br>
 
 ```

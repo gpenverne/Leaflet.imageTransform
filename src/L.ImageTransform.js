@@ -33,11 +33,11 @@ L.ImageTransform = L.ImageOverlay.extend({
             pixelClipPoints.push(L.point(pixel[0], pixel[1]));
         }
 
-        this._clipDone = false;
         this.setClipPixels(pixelClipPoints);
     },
 
     setClipPixels: function(pixelClipPoints) {
+        this._clipDone = false;
         this._pixelClipPoints = pixelClipPoints;
         this._drawCanvas();
     },
