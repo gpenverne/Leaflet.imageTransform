@@ -30,15 +30,17 @@
 
         var anchors = [[56.344192, 136.59558], [56.344192, 137.8782], [55.613245, 137.8782], [55.613245, 136.59558]];
         var clipCoords = [[56.301281, 136.90579],[56.150009, 137.83902],[55.639533, 137.53169],[55.788635, 136.60979]];
-        var image = L.imageTransform('img/image.jpg', anchors, { opacity: 0.5, clip: clipCoords }).addTo(map);
+        var image = L.imageTransform('img/image.jpg', anchors, { opacity: 0.5, clip: clipCoords, disableSetClip: false }).addTo(map);
         var externalPolygon = L.polygon(anchors, {fill: false}).addTo(map);
         
         var clipPolygon = L.polygon(clipCoords, {fill: false, color: 'red'}).addTo(map);
-        clipPolygon.editing.enable();
-        
-        clipPolygon.on('edit', function() {
-            image.setClip(clipPolygon.getLatLngs());
-        })
+        if (!image.options.disableSetClip) {
+            clipPolygon.editing.enable();
+            
+            clipPolygon.on('edit', function() {
+                image.setClip(clipPolygon.getLatLngs());
+            });
+        }
 
         var updateAnchors = function() {
             
@@ -49,8 +51,10 @@
             
             //TODO: support setLatLngs() Leaflet.Draw
             //HACK: update editing points
-            clipPolygon.editing.disable();
-            clipPolygon.editing.enable();
+            if (!image.options.disableSetClip) {
+                clipPolygon.editing.disable();
+                clipPolygon.editing.enable();
+            }
         }
         
         var anchorMarkers = anchors.map(function(anchor) {

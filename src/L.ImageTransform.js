@@ -114,8 +114,8 @@ L.ImageTransform = L.ImageOverlay.extend({
             topLeft = this._latLngToLayerPoint(this._bounds.getNorthWest()),
             size = this._latLngToLayerPoint(this._bounds.getSouthEast())._subtract(topLeft),
             anchors = this._anchors,
-            w = this._imgNode.width,
-            h = this._imgNode.height,
+            w = imgNode.width,
+            h = imgNode.height,
             pixels = [],
             i, len, p;
 
@@ -175,7 +175,7 @@ L.ImageTransform = L.ImageOverlay.extend({
 
     _clipDone: false,
     _drawCanvas: function () {
-        if (!this._clipDone) {
+        if (!this._clipDone && this._imgNode) {
             var canvas = this._canvas,
                 ctx = canvas.getContext('2d');
 
@@ -190,6 +190,9 @@ L.ImageTransform = L.ImageOverlay.extend({
             ctx.closePath();
             ctx.fill();
             ctx.fillStyle = null;
+            if (this.options.disableSetClip) {
+                this._imgNode = null;
+            }
             this._clipDone = true;
         }
     }
