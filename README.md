@@ -61,3 +61,7 @@ Update clip polygon. `newClipPoints` is array of `L.latLng` points.
 getClip()
 ```
 Returns coordinates of current clip polygon (array of `L.LatLng`). This array will be modified if image transform is changed.
+
+###License
+
+The MIT License (MIT)
