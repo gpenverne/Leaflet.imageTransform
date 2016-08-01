@@ -29,7 +29,7 @@ L.ImageTransform = L.ImageOverlay.extend({
 
         for (var p = 0; p < clipLatLngs.length; p++) {
             var mercPoint = this._latLngToLayerPoint(clipLatLngs[p]),
-                pixel = L.ImageTransform.Utils.project(this._matrix3d_inverse, mercPoint.x - topLeft.x, mercPoint.y - topLeft.y);
+                pixel = L.ImageTransform.Utils.project(this._matrix3dInverse, mercPoint.x - topLeft.x, mercPoint.y - topLeft.y);
             pixelClipPoints.push(L.point(pixel[0], pixel[1]));
         }
 
@@ -146,7 +146,7 @@ L.ImageTransform = L.ImageOverlay.extend({
             matrix3d[i] = matrix3d[i] / matrix3d[8];
         }
 
-        this._matrix3d_inverse = L.ImageTransform.Utils.adj(matrix3d);
+        this._matrix3dInverse = L.ImageTransform.Utils.adj(matrix3d);
 
         imgNode.style[L.DomUtil.TRANSFORM] = this._getMatrix3dCSS(this._matrix3d);
         if (this.options.clip) {
