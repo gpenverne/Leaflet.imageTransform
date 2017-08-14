@@ -47,6 +47,10 @@ L.ImageTransform = L.ImageOverlay.extend({
         this._imgNode.src = this._url;
     },
 
+    getAnchors: function() {
+        return this._anchors;
+    },
+
     getClip: function() {
         return this.options.clip;
     },
@@ -61,7 +65,7 @@ L.ImageTransform = L.ImageOverlay.extend({
             L.DomUtil.addClass(this._image, 'leaflet-zoom-hide');
         }
 
-        this._imgNode = L.DomUtil.create('img');
+        this._imgNode = L.DomUtil.create('img', 'gmxImageTransform');
         if (this.options.clip) {
             this._canvas = L.DomUtil.create('canvas', 'leaflet-canvas-transform');
             this._image.appendChild(this._canvas);
@@ -74,6 +78,21 @@ L.ImageTransform = L.ImageOverlay.extend({
             // Hide imgNode until image has loaded
             this._imgNode.style.display = 'none';
         }
+		var node = this._canvas || this._imgNode;
+
+		L.DomEvent
+			.on(node, 'contextmenu', L.DomEvent.stopPropagation)
+			.on(node, 'contextmenu', L.DomEvent.preventDefault)
+			.on(node, 'contextmenu', function (ev) {
+				var _showLocation = {
+					originalEvent: ev,
+					latlng: this._map.mouseEventToLatLng(ev),
+					layerPoint: this._map.mouseEventToLayerPoint(ev),
+					containerPoint: this._map.mouseEventToContainerPoint(ev)
+				};
+
+				this.fire('contextmenu', _showLocation);
+		}, this);
 
         this._updateOpacity();
 
@@ -201,6 +220,11 @@ L.ImageTransform = L.ImageOverlay.extend({
 L.imageTransform = function (url, bounds, options) {
 	return new L.ImageTransform(url, bounds, options);
 };
+L.ImageTransform.addInitHook(function () {
+    if (L.Mixin.ContextMenu) {
+		L.ImageTransform.include(L.Mixin.ContextMenu);
+	}
+});
 
 L.DomUtil.TRANSFORM_ORIGIN = L.DomUtil.testProp(
         ['transformOrigin', 'WebkitTransformOrigin', 'OTransformOrigin', 'MozTransformOrigin', 'msTransformOrigin']);
