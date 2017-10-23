@@ -2,7 +2,7 @@
   "name": "Leaflet.imageTransform",
   "version": "1.0.0",
   "description": "Leaflet plugin to work with tansformed images",
-  "main": "L.ImageTransform.js",
+  "main": "src/L.ImageTransform.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
