@@ -1,0 +1,19 @@
+{
+  "name": "Leaflet.imageTransform",
+  "version": "1.0.0",
+  "description": "Leaflet plugin to work with tansformed images",
+  "main": "L.ImageTransform.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socialpinpoint/Leaflet.imageTransform.git"
+  },
+  "author": "ScanEx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/socialpinpoint/Leaflet.imageTransform/issues"
+  },
+  "homepage": "https://github.com/socialpinpoint/Leaflet.imageTransform#readme"
+}
