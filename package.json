@@ -1,5 +1,5 @@
 {
-  "name": "Leaflet.imageTransform",
+  "name": "leaflet.imageTransform",
   "version": "1.0.0",
   "description": "Leaflet plugin to work with tansformed images",
   "main": "src/L.ImageTransform.js",
